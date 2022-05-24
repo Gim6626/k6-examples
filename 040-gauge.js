@@ -1,6 +1,6 @@
 import {Gauge} from 'k6/metrics';
 
-let gaugeExample = new Gauge('GaugeExample');
+let gaugeExample = new Gauge('Gauge');
 
 export default function () {
     gaugeExample.add(1);

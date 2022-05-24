@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import {Counter} from 'k6/metrics';
 
-let requestsCounter = new Counter('RequestsCounter');
+let requestsCounter = new Counter('Requests Counter');
 
 export default function () {
     for (let i = 0; i < 10; ++i) {

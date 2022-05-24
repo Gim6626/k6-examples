@@ -1,8 +1,8 @@
 import http from 'k6/http';
 import {Trend} from 'k6/metrics';
 
-let succeededRequestsDurationTrend = new Trend('SucceededRequestsDurationTrend');
-let failedRequestsDurationTrend = new Trend('FailedRequestsDurationTrend');
+let succeededRequestsDurationTrend = new Trend('Succeeded Requests Duration Trend');
+let failedRequestsDurationTrend = new Trend('Failed Requests Duration Trend');
 
 export default function () {
     for (let i = 0; i < 100; ++i) {
