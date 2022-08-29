@@ -5,30 +5,36 @@ let durationTrend = new Trend('Duration Trend');
 let successRate = new Rate('Success Rate');
 let requestsCounter = new Counter('Requests Counter');
 
-const timeUnit = '1s';
-const durationSeconds = '120s';
-const gracefulStopSeconds = '1s';
-const executor = 'constant-arrival-rate';
-const preAllocatedVUs = 1;
+const TIME_UNIT = '1s';
+const DURATION_SECONDS = 60;
+const GRACEFUL_STOP_SECONDS = 5;
+const EXECUTOR = 'constant-arrival-rate';
+const RPS_NEWS = 5;
+const RPS_CONTACTS = 10;
+const VUS_NEWS = 5;
+const VUS_CONTACTS = 10;
+const RPS_UNDERFLOW_FRACTION = 0.95;
 
 export let options = {
     scenarios: {
         newsScenario: {
-            executor: executor,
-            rate: 4,
-            preAllocatedVUs: preAllocatedVUs * 4,
-            timeUnit: timeUnit,
-            duration: durationSeconds,
-            gracefulStop: gracefulStopSeconds,
+            executor: EXECUTOR,
+            rate: RPS_NEWS,
+            preAllocatedVUs: VUS_NEWS,
+            maxVUs: VUS_NEWS,
+            timeUnit: TIME_UNIT,
+            duration: `${DURATION_SECONDS}s`,
+            gracefulStop: `${GRACEFUL_STOP_SECONDS}s`,
             exec: 'newsSubscenario',
         },
         contactsScenario: {
-            executor: executor,
-            rate: 1,
-            preAllocatedVUs: preAllocatedVUs,
-            timeUnit: timeUnit,
-            duration: durationSeconds,
-            gracefulStop: gracefulStopSeconds,
+            executor: EXECUTOR,
+            rate: RPS_CONTACTS,
+            preAllocatedVUs: VUS_CONTACTS,
+            maxVUs: VUS_CONTACTS,
+            timeUnit: TIME_UNIT,
+            duration: `${DURATION_SECONDS}s`,
+            gracefulStop: `${GRACEFUL_STOP_SECONDS}s`,
             exec: 'contactsSubscenario',
         },
     },
@@ -37,8 +43,8 @@ export let options = {
         'Duration Trend{subscenario:contacts}': ['med < 160'],
         'Success Rate{subscenario:news}': ['rate > 0.99'],
         'Success Rate{subscenario:contacts}': ['rate > 0.999'],
-        'Requests Counter{subscenario:news}': ['rate > 3.9'],
-        'Requests Counter{subscenario:contacts}': ['rate > 0.9'],
+        'Requests Counter{subscenario:news}': [`rate > ${RPS_NEWS * RPS_UNDERFLOW_FRACTION}`],
+        'Requests Counter{subscenario:contacts}': [`rate > ${RPS_CONTACTS * RPS_UNDERFLOW_FRACTION}`],
     },
 }
 
